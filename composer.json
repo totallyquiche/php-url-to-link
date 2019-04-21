@@ -1,4 +1,18 @@
 {
+    "name": "totallyquiche/php-uri-to-link",
+    "type": "library",
+    "description": "Parses a string for valid URIs and replaces them with HTML anchor tags",
+    "keywords": ["php", "link", "url"],
+    "homepage": "https://github.com/totallyquiche/php-uri-to-link",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Brian Dady",
+            "email": "bndady@gmail.com",
+            "homepage": "https://briandady.com",
+            "role": "Developer"
+        }
+    ],
     "require-dev": {
         "phpunit/phpunit": "^8"
     }
