@@ -11,7 +11,7 @@
             "email": "bndady@gmail.com",
             "homepage": "https://briandady.com",
             "role": "Developer"
-        },
+        }
     ],
     "version": "0.1.0",
     "autoload": {
