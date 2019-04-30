@@ -1,97 +1,146 @@
 <?php
     declare(strict_types = 1);
 
+    namespace TotallyQuiche\URLtoLink;
+
+    require_once(__DIR__ . '/../vendor/autoload.php');
+
     use \PHPUnit\Framework\TestCase;
 
     /**
      * Tests Converter
      *
-     * @covers Converter
+     * @group  Converter
+     * @covers \TotallyQuiche\URLtoLink\Converter
      */
     class ConverterTest extends TestCase {
         /**
-         * Data Provider for Converter::parse
+         * Provides test cases and expected results for parse method
          *
          * @return array
          */
         public function parseProvider() : array {
             return [
-                ['', []],
-                ['This is a string with no URI.', []],
-                ['http://www.google.com', ['http://www.google.com']],
-                ['http://www.google.comhttp://www.google.com', ['http://www.google.com', 'http://www.google.com']],
-                ['http://www.google.com http://www.google.com', ['http://www.google.com', 'http://www.google.com']],
-                ['http://www.google.comahttp://www.google.com', ['http://www.google.com', 'http://www.google.com']],
-                ['http://www.google.com0http://www.google.com', ['http://www.google.com', 'http://www.google.com']],
-                ['http://www.google.com&http://www.google.com', ['http://www.google.com', 'http://www.google.com']]
+                'Empty string' => [
+                    '',
+                    []
+                ],
+                'Single URL' => [
+                    'https://www.example.com:123/forum/questions/?tag=networking&order=newest#top',
+                    [
+                        'https://www.example.com:123/forum/questions/?tag=networking&order=newest#top'
+                    ]
+                ],
+                'Multiple URLs' => [
+                    'https://www.google.com http://www.google.com',
+                    [
+                        'https://www.google.com',
+                        'http://www.google.com'
+                    ]
+                ],
+                'Duplicate URLs' => [
+                    'https://www.google.com https://www.google.com',
+                    [
+                        'https://www.google.com',
+                    ]
+                ],
+                'URL with non-URL' => [
+                    'https://www.google.com is a URL.',
+                    [
+                        'https://www.google.com',
+                    ]
+                ],
+                'Period in URL' => [
+                    'https://www.google.com. is a URL.',
+                    [
+                        'https://www.google.com.',
+                    ]
+                ],
+                'String ends with URL and single period' => [
+                    'My URL is https://www.google.com.',
+                    [
+                        'https://www.google.com'
+                    ]
+                ],
+                'String ends with URL and multiple periods' => [
+                    'My URL is https://www.google.com..',
+                    [
+                        'https://www.google.com.'
+                    ]
+                ]
             ];
         }
 
         /**
-         * Test for Converter::parse
+         * Tests parse method
          *
          * @dataProvider parseProvider
-         * @covers Converter::parse
-         *
-         * @param string $string
-         * @param array $expected
+         * @param        string        $string
+         * @param        array         $expected_result
+         * @return       void
          */
-        public function testParse(string $string, array $expected) {
-            $results = \TotallyQuiche\URItoLink\Converter::parse($string);
+        public function testParse(string $string, array $expected_result) : void {
+            $converter = new Converter;
+            $result = $converter->parse($string);
 
-            $this->assertIsArray($results);
-            $this->assertEquals($expected, $results);
+            $this->assertEquals($expected_result, $result);
         }
 
         /**
-         * Data Provider for Converter::replace
+         * Provides test cases and expected results for convert method
          *
          * @return array
          */
-        public function replaceProvider() : array {
+        public function convertProvider() : array {
             return [
-                ['', '', ''],
-                ['This is a string with no URI.', '', 'This is a string with no URI.'],
-                ['http://www.google.com', '', '<a href="http://www.google.com" target="">http://www.google.com</a>'],
-                ['http://www.google.comhttp://www.google.com', '', '<a href="http://www.google.com" target="">http://www.google.com</a><a href="http://www.google.com" target="">http://www.google.com</a>'],
-                ['http://www.google.com http://www.google.com', '', '<a href="http://www.google.com" target="">http://www.google.com</a> <a href="http://www.google.com" target="">http://www.google.com</a>'],
-                ['http://www.google.comahttp://www.google.com', '', '<a href="http://www.google.com" target="">http://www.google.com</a>a<a href="http://www.google.com" target="">http://www.google.com</a>'],
-                ['http://www.google.com0http://www.google.com', '', '<a href="http://www.google.com" target="">http://www.google.com</a>0<a href="http://www.google.com" target="">http://www.google.com</a>'],
-                ['http://www.google.com&http://www.google.com', '', '<a href="http://www.google.com" target="">http://www.google.com</a>&<a href="http://www.google.com" target="">http://www.google.com</a>'],
-                ['', '_SELF', ''],
-                ['This is a string with no URI.', '_SELF', 'This is a string with no URI.'],
-                ['http://www.google.com', '_SELF', '<a href="http://www.google.com" target="_SELF">http://www.google.com</a>'],
-                ['http://www.google.comhttp://www.google.com', '_SELF', '<a href="http://www.google.com" target="_SELF">http://www.google.com</a><a href="http://www.google.com" target="_SELF">http://www.google.com</a>'],
-                ['http://www.google.com http://www.google.com', '_SELF', '<a href="http://www.google.com" target="_SELF">http://www.google.com</a> <a href="http://www.google.com" target="_SELF">http://www.google.com</a>'],
-                ['http://www.google.comahttp://www.google.com', '_SELF', '<a href="http://www.google.com" target="_SELF">http://www.google.com</a>a<a href="http://www.google.com" target="_SELF">http://www.google.com</a>'],
-                ['http://www.google.com0http://www.google.com', '_SELF', '<a href="http://www.google.com" target="_SELF">http://www.google.com</a>0<a href="http://www.google.com" target="_SELF">http://www.google.com</a>'],
-                ['http://www.google.com&http://www.google.com', '_SELF', '<a href="http://www.google.com" target="_SELF">http://www.google.com</a>&<a href="http://www.google.com" target="_SELF">http://www.google.com</a>'],
-                ['', null, ''],
-                ['This is a string with no URI.', null, 'This is a string with no URI.'],
-                ['http://www.google.com', null, '<a href="http://www.google.com" target="_SELF">http://www.google.com</a>'],
-                ['http://www.google.comhttp://www.google.com', null, '<a href="http://www.google.com" target="_SELF">http://www.google.com</a><a href="http://www.google.com" target="_SELF">http://www.google.com</a>'],
-                ['http://www.google.com http://www.google.com', null, '<a href="http://www.google.com" target="_SELF">http://www.google.com</a> <a href="http://www.google.com" target="_SELF">http://www.google.com</a>'],
-                ['http://www.google.comahttp://www.google.com', null, '<a href="http://www.google.com" target="_SELF">http://www.google.com</a>a<a href="http://www.google.com" target="_SELF">http://www.google.com</a>'],
-                ['http://www.google.com0http://www.google.com', null, '<a href="http://www.google.com" target="_SELF">http://www.google.com</a>0<a href="http://www.google.com" target="_SELF">http://www.google.com</a>'],
-                ['http://www.google.com&http://www.google.com', null, '<a href="http://www.google.com" target="_SELF">http://www.google.com</a>&<a href="http://www.google.com" target="_SELF">http://www.google.com</a>'],
+                'Empty string' => [
+                    '',
+                    ''
+                ],
+                'Single URL' => [
+                    'https://www.example.com:123/forum/questions/?tag=networking&order=newest#top',
+                    '<a href="https://www.example.com:123/forum/questions/?tag=networking&order=newest#top" target="_self">https://www.example.com:123/forum/questions/?tag=networking&order=newest#top</a>'
+                ],
+                'Multiple URLs' => [
+                    'https://www.google.com http://www.google.com',
+                    '<a href="https://www.google.com" target="_self">https://www.google.com</a> <a href="http://www.google.com" target="_self">http://www.google.com</a>'
+                ],
+                'Duplicate URLs' => [
+                    'https://www.google.com https://www.google.com',
+                    '<a href="https://www.google.com" target="_self">https://www.google.com</a> <a href="https://www.google.com" target="_self">https://www.google.com</a>'
+
+                ],
+                'URL with non-URL' => [
+                    'https://www.google.com is a URL.',
+                    '<a href="https://www.google.com" target="_self">https://www.google.com</a> is a URL.'
+                ],
+                'Period in URL' => [
+                    'https://www.google.com. is a URL.',
+                    '<a href="https://www.google.com." target="_self">https://www.google.com.</a> is a URL.'
+                ],
+                'String ends with URL and single period' => [
+                    'My URL is https://www.google.com.',
+                    'My URL is <a href="https://www.google.com" target="_self">https://www.google.com</a>.'
+                ],
+                'String ends with URL and multiple periods' => [
+                    'My URL is https://www.google.com..',
+                    'My URL is <a href="https://www.google.com." target="_self">https://www.google.com.</a>.'
+                ]
             ];
         }
 
         /**
-         * Test for Converter::replace
+         * Tests convert method
          *
-         * @dataProvider replaceProvider
-         * @covers Converter::replace
-         *
-         * @param string $string
-         * @param mixed $target
-         * @param string $expected
+         * @dataProvider convertProvider
+         * @param        string          $string
+         * @param        string          $expected_result
+         * @return       void
          */
-        public function testReplace(string $string, $target, string $expected) {
-            $results = is_null($target) ? $results = \TotallyQuiche\URItoLink\Converter::replace($string)
-                                        : $results = \TotallyQuiche\URItoLink\Converter::replace($string, $target);
+        public function testConvert(string $string, string $expected_result) : void {
+            $converter = new Converter;
+            $result = $converter->convert($string);
 
-            $this->assertIsString($results);
-            $this->assertEquals($expected, $results);
+            $this->assertEquals($expected_result, $result);
         }
     }

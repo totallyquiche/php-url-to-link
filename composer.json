@@ -1,9 +1,9 @@
 {
-    "name": "totallyquiche/php-uri-to-link",
+    "name": "totallyquiche/php-url-to-link",
     "type": "library",
-    "description": "Parses a string for valid URIs and replaces them with HTML anchor tags",
+    "description": "Allows for parsing simple URLs from a string and/or converting them into HTML anchor tags.",
     "keywords": ["php", "link", "url"],
-    "homepage": "https://github.com/totallyquiche/php-uri-to-link",
+    "homepage": "https://github.com/totallyquiche/php-url-to-link",
     "license": "MIT",
     "authors": [
         {
@@ -15,7 +15,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "TotallyQuiche\\URItoLink\\": "src/"
+            "TotallyQuiche\\URLtoLink\\": "src/"
         }
     },
     "require-dev": {
