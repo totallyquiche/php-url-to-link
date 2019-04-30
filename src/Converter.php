@@ -51,9 +51,10 @@
          * Accepts a string, converts URLs found therein into HTML anchor tags, and returns the resulting string
          *
          * @param  string $string
+         * @param  string $target
          * @return string
          */
-        public function convert(string $string) : string {
+        public function convert(string $string, string $target = '_SELF') : string {
             $last_character = substr($string, -1);
             $urls = $this->parse($string);
 
@@ -68,7 +69,7 @@
 
             foreach ($urls as $url) {
                 $string = str_replace($url,
-                                      '<a href="' . $url . '" target="_self">' . $url . '</a>',
+                                      '<a href="' . $url . '" target="' . $target . '">' . $url . '</a>',
                                       $string);
             }
 
