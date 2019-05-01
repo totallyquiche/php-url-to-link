@@ -10,7 +10,7 @@
         const PATH_REGEX = '(?:(?:\/[a-zA-Z0-9\!\$\&\'\(\)\*\+\,\;\=\%\:\@\/\-\_\.]*)?)';
         const QUERY_REGEX = '(?:\?[a-zA-Z0-9\!\$\&\'\(\)\*\+\,\;\=\%\:\@\/\-\_\.]*)';
         const FRAGMENT_REGEX = '(?:\#[a-zA-Z0-9\!\$\&\'\(\)\*\+\,\;\=\%\:\@\/\-\_\.]*)';
-        
+
         private $url_regex;
 
         /**
@@ -27,12 +27,6 @@
          * @return array
          */
         public function parse(string $string) : array {
-            $last_character = substr($string, -1);
-
-            if ($last_character == '.') {
-                $string = substr($string, 0, -1);
-            }
-
             preg_match_all($this->url_regex,
                            $string,
                            $matches,
@@ -55,12 +49,7 @@
          * @return string
          */
         public function convert(string $string, string $target = '_SELF') : string {
-            $last_character = substr($string, -1);
             $urls = $this->parse($string);
-
-            if ($last_character == '.') {
-                $string = substr($string, 0, -1);
-            }
 
             // Sort URLs so we don't make changes to longer URLs that contain short URLs
             usort($urls, function($first, $second) {
@@ -71,10 +60,6 @@
                 $string = str_replace($url,
                                       '<a href="' . $url . '" target="' . $target . '">' . $url . '</a>',
                                       $string);
-            }
-
-            if ($last_character == '.') {
-                $string = $string . $last_character;
             }
 
             return $string;

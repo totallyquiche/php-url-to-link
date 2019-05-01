@@ -55,18 +55,6 @@
                     [
                         'https://www.google.com.',
                     ]
-                ],
-                'String ends with URL and single period' => [
-                    'My URL is https://www.google.com.',
-                    [
-                        'https://www.google.com'
-                    ]
-                ],
-                'String ends with URL and multiple periods' => [
-                    'My URL is https://www.google.com..',
-                    [
-                        'https://www.google.com.'
-                    ]
                 ]
             ];
         }
@@ -118,14 +106,6 @@
                     'https://www.google.com. is a URL.',
                     '<a href="https://www.google.com." target="_self">https://www.google.com.</a> is a URL.'
                 ],
-                'String ends with URL and single period' => [
-                    'My URL is https://www.google.com.',
-                    'My URL is <a href="https://www.google.com" target="_self">https://www.google.com</a>.'
-                ],
-                'String ends with URL and multiple periods' => [
-                    'My URL is https://www.google.com..',
-                    'My URL is <a href="https://www.google.com." target="_self">https://www.google.com.</a>.'
-                ]
             ];
         }
 
