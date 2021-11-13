@@ -34,29 +34,19 @@ class Converter {
     const FRAGMENT_REGEX = '(?:\#[a-zA-Z0-9\!\$\&\'\(\)\*\+\,\;\=\%\:\@\/\-\_\.]*)';
 
     /**
-     * @var string
+     * @const string
      */
-    private $url_regex;
-
-    /**
-     * Initializes this object.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->url_regex = '/(?<URL>' .
-            self::SCHEME_REGEX .
-            self::HOST_REGEX .
-            self::PORT_REGEX .
-            '?' .
-            self::PATH_REGEX .
-            '?' .
-            self::QUERY_REGEX .
-            '?' .
-            self::FRAGMENT_REGEX .
-            '?)/';
-    }
+    const URL_REGEX = '/(?<URL>' .
+        self::SCHEME_REGEX .
+        self::HOST_REGEX .
+        self::PORT_REGEX .
+        '?' .
+        self::PATH_REGEX .
+        '?' .
+        self::QUERY_REGEX .
+        '?' .
+        self::FRAGMENT_REGEX .
+        '?)/';
 
     /**
      * Accepts a string and returns an array of unique URLs found therein
@@ -65,10 +55,10 @@ class Converter {
      *
      * @return array
      */
-    public function parse(string $string) : array
+    public static function parse(string $string) : array
     {
         preg_match_all(
-            $this->url_regex,
+            self::URL_REGEX,
             $string,
             $matches,
             PREG_SET_ORDER
@@ -92,9 +82,9 @@ class Converter {
      *
      * @return string
      */
-    public function convert(string $string, string $target = '_SELF') : string
+    public static function convert(string $string, string $target = '_SELF') : string
     {
-        $urls = $this->parse($string);
+        $urls = self::parse($string);
 
         // Sort URLs so we don't make changes to longer URLs that contain short URLs
         usort($urls, fn($a, $b) => strlen($a) - strlen($b));

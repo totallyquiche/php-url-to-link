@@ -63,10 +63,10 @@ class ConverterTest extends TestCase {
      * @return void
      */
     public function testParse(string $string, array $expected_result) : void {
-        $converter = new Converter;
-        $result = $converter->parse($string);
-
-        $this->assertEquals($expected_result, $result);
+        $this->assertEquals(
+            $expected_result,
+            Converter::parse($string)
+        );
     }
 
     /**
@@ -115,9 +115,9 @@ class ConverterTest extends TestCase {
      * @return void
      */
     public function testConvert(string $string, string $expected_result) : void {
-        $converter = new Converter;
-        $result = $converter->convert($string);
-
-        $this->assertEquals($expected_result, $result);
+        $this->assertEquals(
+            $expected_result,
+            Converter::convert($string)
+        );
     }
 }
