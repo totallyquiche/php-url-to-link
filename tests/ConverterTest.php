@@ -55,6 +55,8 @@ class ConverterTest extends TestCase {
     /**
      * Tests parse method.
      *
+     * @dataProvider parseProvider
+     *
      * @param string $string
      * @param array  $expected_result
      *
