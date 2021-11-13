@@ -87,24 +87,24 @@
                 ],
                 'Single URL' => [
                     'https://www.example.com:123/forum/questions/?tag=networking&order=newest#top',
-                    '<a href="https://www.example.com:123/forum/questions/?tag=networking&order=newest#top" target="_self">https://www.example.com:123/forum/questions/?tag=networking&order=newest#top</a>'
+                    '<a href="https://www.example.com:123/forum/questions/?tag=networking&order=newest#top" target="_SELF">https://www.example.com:123/forum/questions/?tag=networking&order=newest#top</a>'
                 ],
                 'Multiple URLs' => [
                     'https://www.google.com http://www.google.com',
-                    '<a href="https://www.google.com" target="_self">https://www.google.com</a> <a href="http://www.google.com" target="_self">http://www.google.com</a>'
+                    '<a href="https://www.google.com" target="_SELF">https://www.google.com</a> <a href="http://www.google.com" target="_SELF">http://www.google.com</a>'
                 ],
                 'Duplicate URLs' => [
                     'https://www.google.com https://www.google.com',
-                    '<a href="https://www.google.com" target="_self">https://www.google.com</a> <a href="https://www.google.com" target="_self">https://www.google.com</a>'
+                    '<a href="https://www.google.com" target="_SELF">https://www.google.com</a> <a href="https://www.google.com" target="_SELF">https://www.google.com</a>'
 
                 ],
                 'URL with non-URL' => [
                     'https://www.google.com is a URL.',
-                    '<a href="https://www.google.com" target="_self">https://www.google.com</a> is a URL.'
+                    '<a href="https://www.google.com" target="_SELF">https://www.google.com</a> is a URL.'
                 ],
                 'Period in URL' => [
                     'https://www.google.com. is a URL.',
-                    '<a href="https://www.google.com." target="_self">https://www.google.com.</a> is a URL.'
+                    '<a href="https://www.google.com." target="_SELF">https://www.google.com.</a> is a URL.'
                 ],
             ];
         }
